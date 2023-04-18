@@ -1,20 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SplashScreen from './Screens/SplashScreen';
+import HomeScreen from './Screens/HomeScreen';
+import LogInScreen from './Screens/LogInScreen';
+import RegistrScreen from './Screens/RegistrScreen';
+import firebase from './config';
+import { useEffect, useState } from 'react';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+function App() {
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function onAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) {
+      setInitializing(false);
+    }
+    useEffect(() => {
+      const subsriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+      return subsriber;
+    }, []);
+
+    if (initializing) return null;
+  }
+  if (!user) {
+    return (
+        <Stack.Navigator initialRouteName='Splash' screenOptions={{
+          headerShown: false
+        }}>
+          <Stack.Screen name='Splash' component={SplashScreen} />
+          <Stack.Screen options={{ headerShown: false, headerBackVisible: false }} name='LogInScreen' component={LogInScreen} />
+          <Stack.Screen name='HomeScreen' component={HomeScreen} />
+          <Stack.Screen name='RegistrScreen' component={RegistrScreen} />
+        </Stack.Navigator>
+    );
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <Stack.Navigator>
+
+    </Stack.Navigator>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default () => {
+  return (
+    <NavigationContainer>
+      <App />
+    </NavigationContainer>
+  )
+}
