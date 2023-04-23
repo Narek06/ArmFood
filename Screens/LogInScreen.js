@@ -2,8 +2,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { firebase } from '../config'
-import { TextInput } from 'react-native-gesture-handler'
+import { ScrollView, TextInput } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { Ionicons } from '@expo/vector-icons'
 
 const LogInScreen = () => {
 
@@ -12,6 +13,11 @@ const LogInScreen = () => {
     const [password, setPassword] = useState('');
     const [image, setImage] = useState(require('../assets/icons8-filled-circle-24.png'));
     const [rememberMe, setRememberMe] = useState(false);
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
 
     loginUser = async (email, password) => {
         try {
@@ -32,60 +38,73 @@ const LogInScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Image style={{ width: "100%", height: 250 }} source={require('../Images/LoginHeader.png')} />
-            <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 64 }}>Welcome !</Text>
-            <Text>Sing in to your account</Text>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                    style={styles.input}
-                />
-                <TextInput
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    style={styles.input}
-                    secureTextEntry
-                />
-            </View>
-            <View style={{ flexDirection: 'row', width: "80%", justifyContent: 'space-between', marginTop: 8 }}>
-                <View style={{ flexDirection: 'row' }}>
+        <ScrollView>
+            <SafeAreaView style={styles.container}>
+                <Image style={{ width: "100%", height: 250 }} source={require('../Images/LoginHeader.png')} />
+                <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 64 }}>Welcome !</Text>
+                <Text>Sing in to your account</Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder="Email"
+                        value={email}
+                        onChangeText={text => setEmail(text)}
+                        style={styles.emailInput}
+                    />
+                    <View style={styles.passwordInput}>
+                        <TextInput
+                            placeholder="Password"
+                            value={password}
+                            onChangeText={text => setPassword(text)}
+                            secureTextEntry={!passwordVisible}
+                            style={styles.input}
+                        />
+                        <TouchableOpacity
+                            style={styles.toggleButton}
+                            onPress={togglePasswordVisibility}
+                        >
+                            <Ionicons
+                                name={passwordVisible ? 'eye-off' : 'eye'}
+                                size={24}
+                                color="black"
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{ flexDirection: 'row', width: "80%", justifyContent: 'space-between', marginTop: 8 }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity
+                            style={{ flexDirection: 'row' }}
+                            onPress={handlePress}
+                        >
+                            <Image style={{ width: 17, height: 17 }} source={image} />
+                            <Text style={{ marginLeft: 3 }}>{rememberMe ? 'Remembered!' : 'Remember Me'}</Text>
+                        </TouchableOpacity>
+                    </View>
                     <TouchableOpacity
-                        style={{ flexDirection: 'row' }}
-                        onPress={handlePress}
-
+                        onPress={() => navigation.navigate('ForgotPassword')}
                     >
-                        <Image style={{ width: 17, height: 17 }} source={image} />
-                        <Text style={{ marginLeft: 3 }}>{rememberMe ? 'Remembered!' : 'Remember Me'}</Text>
+                        <Text style={{ color: "#317953", }}>Forgot Password ?</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('ForgotPassword')}
+                    onPress={() => loginUser(email, password)
+
+                    }
+                    style={styles.button}
                 >
-                    <Text style={{ color: "#317953", }}>Forgot Password ?</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 18, width: "80%", textAlign: 'center', color: "white" }}>Sing In</Text>
                 </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-                onPress={() => loginUser(email, password)
 
-                }
-                style={styles.button}
-            >
-                <Text style={{ fontWeight: 'bold', fontSize: 18, width: "80%", textAlign: 'center', color: "white" }}>Sing In</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-                onPress={() => navigation.navigate('RegistrScreen')}
-                style={{ marginTop: 10 }}
-            >
-                <Text style={{ fontStyle: 'normal', fontSize: 16 }}>
-                    Dont have an account? <Text style={{ color: "#317953" }}>Create Account ?</Text>
-                </Text>
-            </TouchableOpacity>
-        </SafeAreaView>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('RegistrScreen')}
+                    style={{ marginTop: 10 }}
+                >
+                    <Text style={{ fontStyle: 'normal', fontSize: 16 }}>
+                        Dont have an account? <Text style={{ color: "#317953" }}>Create Account ?</Text>
+                    </Text>
+                </TouchableOpacity>
+            </SafeAreaView>
+        </ScrollView >
     )
 }
 
@@ -114,15 +133,28 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: "#3E9B1A",
     },
-    input: {
+    passwordInput: {
         backgroundColor: 'white',
         paddingHorizontal: 15,
+        paddingVertical: 12,
+        borderRadius: 10,
+        marginTop: 5,
+        height: 45,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    inputContainer: {
+        width: "80%"
+    },
+    emailInput: {
+        backgroundColor: 'white',
+        paddingLeft: 15,
         paddingVertical: 10,
         borderRadius: 10,
         marginTop: 5,
         height: 45
     },
-    inputContainer: {
-        width: "80%"
+    input: {
+        width: "90%"
     }
 })
