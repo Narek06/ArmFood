@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { firebase } from '../config'
@@ -39,7 +39,9 @@ const LogInScreen = () => {
 
     return (
         <ScrollView>
-            <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.container}>
                 <Image style={{ width: "100%", height: 250 }} source={require('../Images/LoginHeader.png')} />
                 <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 64 }}>Welcome !</Text>
                 <Text>Sing in to your account</Text>
@@ -103,7 +105,7 @@ const LogInScreen = () => {
                         Dont have an account? <Text style={{ color: "#317953" }}>Create Account ?</Text>
                     </Text>
                 </TouchableOpacity>
-            </SafeAreaView>
+            </KeyboardAvoidingView>
         </ScrollView >
     )
 }
@@ -113,7 +115,8 @@ export default LogInScreen;
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flex: 1
     },
     textInput: {
         paddingTop: 20,

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { firebase } from '../config'
@@ -35,7 +35,9 @@ const RegistrScreen = () => {
 
     return (
         <ScrollView>
-            <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.container}>
                 <Image style={{ width: "100%", height: 250 }} source={require('../Images/RegistrHeader.png')} />
                 <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 64 }}>Sing Up!</Text>
                 <Text>Create new account</Text>
@@ -88,7 +90,7 @@ const RegistrScreen = () => {
                 >
                     <Text style={{ fontWeight: 'bold', fontSize: 18, width: "80%", textAlign: 'center', color: "white" }}>Sing up</Text>
                 </TouchableOpacity>
-            </SafeAreaView>
+            </KeyboardAvoidingView>
         </ScrollView>
     )
 }
