@@ -1,29 +1,30 @@
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { firebase } from '../config'
 import { ScrollView } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
+import Checkbox from 'expo-checkbox';
 
 const RegistrScreen = () => {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [image, setImage] = useState(require('../assets/icons8-filled-circle-17.png'));
+    // const [image, setImage] = useState(require('../assets/icons8-filled-circle-17.png'));
     const [passwordVisible, setPasswordVisible] = useState(false);
+    const [agreedToTerms, setAgreedToTermss] = useState(false);
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
     };
 
-    const handlePress = () => {
-        if (image === require('../assets/icons8-filled-circle-17.png')) {
-            setImage(require('../assets/AgreeBtn.png'));
-        } else {
-            setImage(require('../assets/icons8-filled-circle-17.png'));
-        }
-    };
+    // const handlePress = () => {
+    //     if (image === require('../assets/icons8-filled-circle-17.png')) {
+    //         setImage(require('../assets/AgreeBtn.png'));
+    //     } else {
+    //         setImage(require('../assets/icons8-filled-circle-17.png'));
+    //     }
+    // };
 
     createUser = async (email, password) => {
         try {
@@ -43,7 +44,13 @@ const RegistrScreen = () => {
                 <Text>Create new account</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
-                        placeholder="Name"
+                        placeholder="FirstName"
+                        value={Text}
+                        onChangeText={text => setName(text)}
+                        style={styles.emailInput}
+                    />
+                    <TextInput
+                        placeholder="LastName"
                         value={Text}
                         onChangeText={text => setName(text)}
                         style={styles.emailInput}
@@ -69,26 +76,40 @@ const RegistrScreen = () => {
                             <Ionicons
                                 name={passwordVisible ? 'eye-off' : 'eye'}
                                 size={24}
-                                color="black"
+                                color="#8B8B8B"
+                                style={{}}
                             />
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ width: "80%" }}>
-                    <TouchableOpacity
-                        style={{ flexDirection: 'row', marginTop: 6 }}
-                        onPress={handlePress}
-
+                <View style={{ width: "80%", flexDirection: 'row', marginTop: 3 }}>
+                    <Checkbox style={{
+                        borderRadius: 24,
+                        width: 17,
+                        height: 17,
+                    }}
+                        value={agreedToTerms}
+                        onValueChange={setAgreedToTermss}
+                        color={'#F79515'}
+                    />
+                    <Text
+                        style={{ marginLeft: 3 }}
                     >
-                        <Image style={{ width: 17, height: 17 }} source={image} />
-                        <Text style={{ marginLeft: 3 }}>I agree with the terms and conditions</Text>
-                    </TouchableOpacity>
+                        I agree with the terms and conditions
+                    </Text>
                 </View>
                 <TouchableOpacity
                     onPress={() => createUser(email, password)}
                     style={styles.button}
+                    disabled={!agreedToTerms}
                 >
-                    <Text style={{ fontWeight: 'bold', fontSize: 18, width: "80%", textAlign: 'center', color: "white" }}>Sing up</Text>
+                    <Text
+                        style={{
+                            fontWeight: 'bold',
+                            fontSize: 18, width: "80%",
+                            textAlign: 'center',
+                            color: "white"
+                        }}>Sing up</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
         </ScrollView>

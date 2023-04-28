@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { firebase } from '../config'
 import { ScrollView, TextInput } from 'react-native-gesture-handler'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 
 const LogInScreen = () => {
