@@ -6,6 +6,7 @@ import LogInScreen from './Screens/LogInScreen';
 import RegistrScreen from './Screens/RegistrScreen';
 import firebase from './config';
 import { useEffect, useState } from 'react';
+import ForgotScreen from './Screens/ForgotScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ function App() {
           <Stack.Screen options={{ headerShown: false, headerBackVisible: false }} name='LogInScreen' component={LogInScreen} />
           <Stack.Screen name='HomeScreen' component={HomeScreen} />
           <Stack.Screen name='RegistrScreen' component={RegistrScreen} />
+          <Stack.Screen name='ForgotScreen' component={ForgotScreen} />
         </Stack.Navigator>
     );
   }
